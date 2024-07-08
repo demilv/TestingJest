@@ -22,7 +22,8 @@ class Room {
   }
 
   isOccupied(date) {
-
+      const checkDate = new Date(date);
+      return this.bookings.some(booking => checkDate >= booking.checkIn && checkDate <=booking.checkOut)
   }
 
   occupancyPercentage(startDate, endDate) {
@@ -34,6 +35,8 @@ class Room {
   }
 
   static availableRooms(rooms, startDate, endDate) {
-    
+
   }
 }
+
+module.exports = {Room, Booking}
