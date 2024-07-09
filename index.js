@@ -9,7 +9,16 @@ class Booking {
   }
 
   get fee() {
-    
+    let basePrice = this.room.rate;
+    let roomDiscount = this.room.discount;
+    let bookingDiscount = this.discount;
+    let finalPriceDay = basePrice * (1 - (roomDiscount / 100)) * (1 - (bookingDiscount / 100));
+    let startingDate = this.checkIn.getTime();
+    let endingDate    = this.checkOut.getTime();    
+    let totalTime = endingDate - startingDate;
+    let totalDays = (totalTime/(1000*60*60*24))
+    let totalFinalPrice = finalPriceDay * totalDays
+    return totalFinalPrice
   }
 }
 
@@ -26,30 +35,48 @@ class Room {
       return this.bookings.some(booking => checkDate >= booking.checkIn && checkDate <booking.checkOut)
   }
 
-  occupancyPercentage(startDate, endDate) {
-    let fechaInicio = startDate.getTime();
-    let fechaFin    = endDate.getTime();    
-    let totalMilisegundos = fechaFin - fechaInicio;
-    let totalDias = totalMilisegundos/(1000*60*60*24)
-    let diaActual = startDate
-    let diasOcupados = 0
+  occupancyPercentage(date1, date2) {
+    let startDate = new Date(date1)
+    let endDate = new Date(date2)
+    let startingDate = startDate.getTime();
+    let endingDate    = endDate.getTime();    
+    let totalTime = endingDate - startingDate;
+    let totalDays = (totalTime/(1000*60*60*24))+1
+    let currentDay = startDate
+    let fullDays = 0
 
-    for (let i = 0; i < totalDias; i++){      
-      if(this.isOccupied(diaActual))
+    for (let i = 0; i < totalDays; i++){      
+      if(this.isOccupied(currentDay) === true)
       {
-          diasOcupados++
+          fullDays++
       }      
-      diaActual.setTime(diaActual.getTime() + (1000 * 60 * 60 * 24));
+      currentDay.setTime(currentDay.getTime() + (1000 * 60 * 60 * 24));
     }
-    return Math.round((diasOcupados / totalDias) * 100)
+    return Math.round((fullDays / totalDays) * 100)
   }
 
-  static totalOccupancyPercentage(rooms, startDate, endDate) {
+  static totalOccupancyPercentage(rooms, startDate, endDate) {    
+    let totalrooms = rooms.length;
+    let totalPercentage = 0
 
+    rooms.forEach(room => {
+      totalPercentage += room.occupancyPercentage(startDate, endDate);
+    });
+    return Math.round(totalPercentage / totalrooms);
   }
 
   static availableRooms(rooms, startDate, endDate) {
+    let roomAvailable = []
+    let totalPercentage = 0
 
+      rooms.forEach(room => {
+        totalPercentage += room.occupancyPercentage(startDate, endDate);        
+        if (totalPercentage === 0){
+          roomAvailable.push(room.name)
+        }
+        totalPercentage = 0
+      })
+    return roomAvailable
   }
 }
 
