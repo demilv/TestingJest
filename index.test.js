@@ -1,22 +1,29 @@
 const { Room, Booking } = require('./index');
 
-const room1 = new Room("Room 1", 10000, 10);
-const room2 = new Room("Room 2", 15000, 5);
+let room1, room2;
 
-const booking1 = new Booking("Gonzalo", "gonzalo.cano.rodriguez93@gmail.com", "2024-07-01", "2024-07-05", 15, room1);
-const booking2 = new Booking("Wiiu", "wiwi@gmail.com", "2024-07-10", "2024-07-15", 10, room1);
-const booking3 = new Booking("Mal", "mal@gmail.com", "2024-07-07", "2024-07-09", 20, room2)
+function data() { 
+  room1 = new Room("Room 1", 10000, 10);
+  room2 = new Room("Room 2", 15000, 5);
 
-room1.bookings.push(booking1);
-room1.bookings.push(booking2);
-room2.bookings.push(booking3);
+  const booking1 = new Booking("Gonzalo", "gonzalo.cano.rodriguez93@gmail.com", "2024-07-01", "2024-07-05", 15, room1);
+  const booking2 = new Booking("Wiiu", "wiwi@gmail.com", "2024-07-10", "2024-07-15", 10, room1);
+  const booking3 = new Booking("Mal", "mal@gmail.com", "2024-07-07", "2024-07-09", 20, room2)
 
+  room1.bookings.push(booking1);
+  room1.bookings.push(booking2);
+  room2.bookings.push(booking3);
+}
+
+beforeEach(() => {
+  data(); 
+});
 
 test('room will not be available', () => {
   expect(room1.isOccupied("2024-07-01")).toBe(true);
 });
 
-test('hroom will not be available', () => {
+test('room will not be available', () => {
   expect(room1.isOccupied("2024-07-03")).toBe(true);
 });
 
@@ -33,8 +40,15 @@ test('room will be free', () => {
 });
 
 test('The occupation % will be 50%', () => {
-  console.log(room1.occupancyPercentage("2024-07-04", "2024-07-05"))
   expect(room1.occupancyPercentage("2024-07-04", "2024-07-05")).toBe(50);
+});
+
+test('The occupation % will be 0%', () => {
+  expect(room1.occupancyPercentage("2024-07-06", "2024-07-08")).toBe(0);
+});
+
+test('The occupation % will be 100%', () => {
+  expect(room1.occupancyPercentage("2024-07-02", "2024-07-04")).toBe(100);
 });
 
 test('The occupation % will be 33%', () => {
@@ -71,11 +85,11 @@ test('Room 2 should be free', () => {
 });
 
 test('Total fee should be 30600', () => {
-  const actualFee = booking1.fee;
+  const actualFee = room1.bookings[0].fee;
   expect(actualFee).toBe(30600);
-})
+});
 
 test('Total fee should be 22800', () => {
-  const actualFee = booking3.fee;
+  const actualFee = room2.bookings[0].fee;
   expect(actualFee).toBe(22800);
-})
+});
