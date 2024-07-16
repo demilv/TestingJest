@@ -3,12 +3,12 @@ const { Room, Booking } = require('./index');
 let room1, room2;
 
 function data() { 
-  room1 = new Room("Room 1", 10000, 10);
-  room2 = new Room("Room 2", 15000, 5);
+  room1 = new Room({name: "Room 1", rate: 10000, discount: 10});
+  room2 = new Room({name: "Room 2", rate: 15000, discount: 5});
 
-  const booking1 = new Booking("Gonzalo", "gonzalo.cano.rodriguez93@gmail.com", "2024-07-01", "2024-07-05", 15, room1);
-  const booking2 = new Booking("Wiiu", "wiwi@gmail.com", "2024-07-10", "2024-07-15", 10, room1);
-  const booking3 = new Booking("Mal", "mal@gmail.com", "2024-07-07", "2024-07-09", 20, room2)
+  const booking1 = new Booking({name: "Gonzalo", email: "gonzalo.cano.rodriguez93@gmail.com", checkIn: "2024-07-01", checkOut: "2024-07-05", discount: 15, room: room1});
+  const booking2 = new Booking({name: "Wiiu", email: "wiwi@gmail.com", checkIn: "2024-07-10", checkOut: "2024-07-15", discount: 10, room: room1});
+  const booking3 = new Booking({name: "Mal", email: "mal@gmail.com", checkIn: "2024-07-07", checkOut: "2024-07-09", discount: 20, room: room2})
 
   room1.bookings.push(booking1);
   room1.bookings.push(booking2);
