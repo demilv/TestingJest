@@ -1,9 +1,9 @@
 {
   "devDependencies": {
-    "jest": "^29.7.0"
-  },  
-  "scripts": {
-    "test": "jest"
+    "jest": "^29.7.0",
+    "typescript": "^5.5.3"
+  },
+  "scripts": {    
+    "test": "npx tsc index.ts && jest" 
   }
-  
 }
